@@ -35,7 +35,6 @@ async function initPoller() {
 }
 
 async function handlePriceSSE(req, res) {
-    console.log('handling price SSE..')
     res.statusCode = 200
 
     res.setHeader('Content-Type', 'text/event-stream')

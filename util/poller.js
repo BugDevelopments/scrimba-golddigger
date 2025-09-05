@@ -22,7 +22,6 @@ await fetch('https://api.livecoinwatch.com/credits', {
 */
 
 export default async function pollLivecoinAPI(apiKey) {
-  console.log('polling..')
   const apiUrl = 'https://api.livecoinwatch.com/coins/single'
   const options = {
     method: "POST" ,
