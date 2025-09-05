@@ -4,7 +4,7 @@ import path from 'node:path'
 import 'dotenv/config'
 import pollLivecoinAPI from './util/poller.js'
 
-const PORT = 9999
+const PORT = process.env.PORT || 9999
 
 const __dirname = import.meta.dirname
 const publicPath = path.join(__dirname, 'public')
@@ -27,12 +27,10 @@ const server = http.createServer( async (req,res) => {
 
 server.listen(PORT, ()=>{
     console.log('server listening on port ', PORT)
-    //initPoller()
 })
 
 async function initPoller() {
     currentRate = await pollLivecoinAPI(livecoinApiKey)
-    console.log(currentRate)
     setTimeout(initPoller, 2000)
 }
 
