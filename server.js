@@ -10,24 +10,51 @@ const __dirname = import.meta.dirname
 const publicPath = path.join(__dirname, 'public')
 const html404Path = path.join(publicPath, '404.html')
 const html404 = await fs.readFile(html404Path)
+const livecoinApiKey = process.env.LIVECOIN_API_KEY
+let currentRate = null
+
+initPoller()
 
 const server = http.createServer( async (req,res) => {
     if(req.method === 'GET')
-        return await handleGet(req, res)
+        if(req.url === '/api/price') {
+            return await handlePriceSSE(req,res)
+        } else {
+            return await handleGet(req, res)
+        }
     
 })
 
 server.listen(PORT, ()=>{
     console.log('server listening on port ', PORT)
-    initPoller()
+    //initPoller()
 })
 
 async function initPoller() {
-    const livecoinApiKey = process.env.LIVECOIN_API_KEY
-
-    let currentRate = await pollLivecoinAPI(livecoinApiKey)
+    currentRate = await pollLivecoinAPI(livecoinApiKey)
     console.log(currentRate)
     setTimeout(initPoller, 2000)
+}
+
+async function handlePriceSSE(req, res) {
+    console.log('handling price SSE..')
+    res.statusCode = 200
+
+    res.setHeader('Content-Type', 'text/event-stream')
+    res.setHeader('Cache-Control', 'no-cache')
+    res.setHeader('Connection', 'keep-alive')
+
+    setInterval( () => {
+        res.write(
+            `data: ${JSON.stringify(
+                {
+                    event: 'price-update',
+                    rate: currentRate
+                }
+            )}\n\n`
+        )
+    }, 2000)
+
 }
 
 async function handleGet(req, res) {
