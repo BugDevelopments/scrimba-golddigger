@@ -13,6 +13,8 @@ const html404 = await fs.readFile(html404Path)
 const livecoinApiKey = process.env.LIVECOIN_API_KEY
 let currentRate = null
 
+const POLLING_INTERVAL = 60000
+
 initPoller()
 
 const server = http.createServer( async (req,res) => {
@@ -29,17 +31,30 @@ server.listen(PORT, ()=>{
     console.log('server listening on port ', PORT)
 })
 
-async function initPoller() {
+async function initPoller(pollingInterval=60000) {
     currentRate = await pollLivecoinAPI(livecoinApiKey)
-    setTimeout(initPoller, 2000)
+    setTimeout(initPoller, pollingInterval)
 }
 
 async function handlePriceSSE(req, res) {
+    if(currentRate === null)
+        currentRate = await pollLivecoinAPI(livecoinApiKey)
+
     res.statusCode = 200
 
     res.setHeader('Content-Type', 'text/event-stream')
     res.setHeader('Cache-Control', 'no-cache')
     res.setHeader('Connection', 'keep-alive')
+
+    // fist reply
+    res.write(
+            `data: ${JSON.stringify(
+                {
+                    event: 'price-update',
+                    rate: currentRate
+                }
+            )}\n\n`
+        )
 
     setInterval( () => {
         res.write(
@@ -50,7 +65,7 @@ async function handlePriceSSE(req, res) {
                 }
             )}\n\n`
         )
-    }, 2000)
+    }, POLLING_INTERVAL)
 
 }
 

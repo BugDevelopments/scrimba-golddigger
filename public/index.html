@@ -19,13 +19,14 @@
         <h1 class="title">GoldDigger</h1>
         <img src="gold.png" alt="gold bars and nuggets">
         <section class="price-info-container">
+            <div class="currency" id="coin">XAUT</div> <!-- input spinner -->
             <p>$<span id="price-display" class="price" aria-live="assertive">----.--</span> / Oz*</p>
             <p id="connection-status" class="status" aria-live="polite">Live Price 🟢</p>
         </section>
         <form id="invest-form">
-            <label for="investment-amount">Amount to invest</label>
             <div class="input-container">
-                <div class="currency">$</div>
+                <label for="investment-amount">Amount to invest</label>
+                <div class="currency">$</div> <!-- input spinner -->
                 <input type="number" id="investment-amount" placeholder="100.00" required>
             </div>
             <button id="invest-btn" class="invest-btn" aria-label="Invest in gold now">Invest Now!</button>

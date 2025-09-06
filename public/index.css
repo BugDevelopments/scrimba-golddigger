@@ -50,8 +50,9 @@ img {
 
 .status {
     position: absolute;
-    top: -24px;
-    left: 30px;
+    top: -50%;
+    left: auto;
+    right: auto;
     background-color: var(--brown);
     padding: 0 .2em;
     font-size: 14px;
@@ -60,12 +61,13 @@ img {
 .price-info-container {
     display: flex;
     gap: 0.5em;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
     font-size: 110%;
     border: 2px solid var(--gold);
     position: relative;
     border-radius: 10px;
-    padding: 0 1em;
+    padding-right: 1em;
 }
 
 form {
@@ -76,12 +78,12 @@ form {
 }
 
 .input-container {
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .currency {
-    align-self: stretch;
     margin-right: 0;
     padding: .5em;
     border-radius: 10px;
@@ -92,14 +94,21 @@ form {
     color: var(--gold);
 }
 
+#coin {
+    font-size: 1.2em;
+    border: 0;
+    border-right: 1px solid var(--gold);
+}
+
 label {
     position: absolute;
+    padding: 0 .2em;
     font-size: 14px;
+    left: auto;
+    right: auto;
     top: -7px;
-    left: 30px;
     z-index: 1;
     background-color: var(--brown);
-    padding: 0 .2em;
 }
 
 input {
